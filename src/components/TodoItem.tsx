@@ -1,11 +1,6 @@
 import { TodoListItem } from "@/types";
 
-export default function TaskItem({
-  name,
-  timeLeft,
-  isDone,
-  isPaused,
-}: TodoListItem) {
+export default function TaskItem({ name, timeSpent, isPaused }: TodoListItem) {
   return (
     <div className="p-2 bg-slate-400 rounded flex space-x-2">
       <div>
@@ -13,12 +8,8 @@ export default function TaskItem({
         <p>{name}</p>
       </div>
       <div>
-        <p>timeLeft: </p>
-        <p>{timeLeft}</p>
-      </div>
-      <div>
-        <p>isDone: </p>
-        <p>{isDone}</p>
+        <p>timeSpent: </p>
+        <p>{timeSpent}</p>
       </div>
       <div>
         <p>isPaused: </p>
