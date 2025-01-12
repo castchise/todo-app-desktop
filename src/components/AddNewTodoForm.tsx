@@ -61,7 +61,9 @@ export default function AddNewTodoForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Add</Button>
+        <Button type="submit" disabled={!form.getValues("taskName")}>
+          Add
+        </Button>
       </form>
     </Form>
   );
