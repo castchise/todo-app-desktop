@@ -1,12 +1,22 @@
+/* eslint-disable import/no-named-as-default-member */
 import AddNewTodoForm from "@/components/AddNewTodoForm";
 import TodoItemList from "@/components/TodoItemList";
 import { useGlobalContext } from "@/contexts";
 import { Separator } from "@/components/ui/separator";
 import DarkThemeSwitch from "./DarkThemeSwitch";
 import { cn } from "@/lib/utils";
+import { useMemo } from "react";
+import duration from "dayjs/plugin/duration";
+import dayjs from "dayjs";
+
+dayjs.extend(duration);
 
 export default function RootLayout() {
   const { todoList, darkmode } = useGlobalContext();
+
+  const totalDuration = useMemo(() => {
+    return todoList.reduce((sum, item) => sum + item.timeSpent, 0);
+  }, [todoList]);
 
   return (
     <div className={cn(darkmode && "dark")}>
@@ -28,7 +38,9 @@ export default function RootLayout() {
         <Separator className="my-8" />
         <div className="w-full flex items-center justify-between">
           <DarkThemeSwitch />
-          <p className="font-semibold text-sm">Total: 00:00:00</p>
+          <p className="font-semibold text-sm">
+            Total: {dayjs.duration(totalDuration, "seconds").format("HH:mm:ss")}
+          </p>
         </div>
       </div>
     </div>
