@@ -1,4 +1,5 @@
-import { createRoot } from "react-dom/client";
-
-const root = createRoot(document.body);
-root.render(<h2 className="text-red-700">Hello from React!</h2>);
+export default function App() {
+  return (
+    <div className="w-full h-screen bg-slate-300 dark:bg-slate-500">React</div>
+  );
+}
