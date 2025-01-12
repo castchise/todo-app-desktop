@@ -3,26 +3,31 @@ import TodoItemList from "@/components/TodoItemList";
 import { useGlobalContext } from "@/contexts";
 import { Separator } from "@/components/ui/separator";
 import DarkThemeSwitch from "./DarkThemeSwitch";
+import { cn } from "@/lib/utils";
 
 export default function RootLayout() {
-  const { todoList } = useGlobalContext();
+  const { todoList, darkmode } = useGlobalContext();
 
   return (
-    <div className="w-full h-screen p-4 flex flex-col sm:p-8">
-      <AddNewTodoForm />
+    <div className={cn(darkmode && "dark")}>
+      <div
+        className={"w-full h-screen p-4 flex flex-col sm:p-8 dark:bg-gray-600"}
+      >
+        <AddNewTodoForm />
 
-      {todoList.length > 0 ? (
-        <TodoItemList todoList={todoList} className="mt-8" />
-      ) : (
-        <p className="text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
-          No tasks to track yet...
-        </p>
-      )}
+        {todoList.length > 0 ? (
+          <TodoItemList todoList={todoList} className="mt-8" />
+        ) : (
+          <p className="text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
+            No tasks to track yet...
+          </p>
+        )}
 
-      <Separator className="my-8" />
-      <div className="w-full flex items-center justify-between">
-        <DarkThemeSwitch />
-        <p className="font-semibold text-sm">Total: 00:00:00</p>
+        <Separator className="my-8" />
+        <div className="w-full flex items-center justify-between">
+          <DarkThemeSwitch />
+          <p className="font-semibold text-sm">Total: 00:00:00</p>
+        </div>
       </div>
     </div>
   );

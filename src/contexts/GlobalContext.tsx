@@ -4,6 +4,8 @@ import { createContext, ReactElement, useContext, useState } from "react";
 interface GlobalContextProps {
   todoList: TodoListItem[];
   setTodoList?: (updatedList: TodoListItem[]) => void;
+  darkmode?: boolean;
+  setDarkmode?: (theme: boolean) => void;
 }
 
 const defaultValues: GlobalContextProps = {
@@ -20,10 +22,13 @@ export function GlobalContextProvider({
   children: ReactElement;
 }) {
   const [todoList, setTodoList] = useState(value?.todoList || []);
+  const [darkmode, setDarkmode] = useState(value?.darkmode || false);
 
   const contextValue: GlobalContextProps = {
     todoList,
     setTodoList,
+    darkmode,
+    setDarkmode,
   };
 
   return (
