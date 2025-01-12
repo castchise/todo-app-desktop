@@ -16,5 +16,5 @@ jobs:
         run: npm install
       - name: publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.desktop_electron_app }}
         run: npm run publish
