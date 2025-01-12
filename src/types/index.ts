@@ -4,3 +4,5 @@ export interface TodoListItem {
   timeSpent: number;
   isPaused: boolean;
 }
+
+export type LocalStorageKey = "todoList" | "darkmode";

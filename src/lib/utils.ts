@@ -1,4 +1,4 @@
-import { TodoListItem } from "@/types";
+import { LocalStorageKey, TodoListItem } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -12,6 +12,12 @@ export function getTodoList(): TodoListItem[] | null {
     : [];
 }
 
-export function setTodoList(todoList: TodoListItem[]) {
-  localStorage.setItem("todoList", JSON.stringify(todoList));
+export function setLocalStorageValue<T>(key: LocalStorageKey, value: T) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function getIsDarkmode() {
+  return localStorage.getItem("darkmode")
+    ? JSON.parse(localStorage.getItem("darkmode"))
+    : false;
 }

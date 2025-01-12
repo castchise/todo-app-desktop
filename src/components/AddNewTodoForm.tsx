@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { TodoListItem } from "@/types";
-import { getTodoList, setTodoList } from "@/lib/utils";
+import { getTodoList, setLocalStorageValue } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import { v4 as uuid } from "uuid";
 
@@ -41,7 +41,7 @@ export default function AddNewTodoForm() {
     const todoList = getTodoList();
     const updatedTodoList = [...todoList, newTask];
     context.setTodoList(updatedTodoList);
-    setTodoList(updatedTodoList);
+    setLocalStorageValue("todoList", updatedTodoList);
 
     form.reset();
   }
