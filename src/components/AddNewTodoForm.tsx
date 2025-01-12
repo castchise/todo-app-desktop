@@ -16,7 +16,7 @@ const formSchema = z.object({
   task: z.string(),
 });
 
-export function NewTaskForm() {
+export default function AddNewTodoForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
