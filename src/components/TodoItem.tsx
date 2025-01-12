@@ -1,15 +1,10 @@
-/* eslint-disable import/no-named-as-default-member */
 import { TodoListItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Trash2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn, formatDurationToHours } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
-import duration from "dayjs/plugin/duration";
-import dayjs from "dayjs";
 import ConfirmationDialog from "./ConfirmationDialog";
-
-dayjs.extend(duration);
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
@@ -111,7 +106,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
       </p>
 
       <div className="ml-auto flex items-center">
-        <p>{dayjs.duration(time, "seconds").format("HH:mm:ss")}</p>
+        <p>{formatDurationToHours(time)}</p>
         <Button
           size="icon"
           variant="ghost"
