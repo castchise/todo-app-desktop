@@ -18,7 +18,12 @@ export default function TaskItem({
 
   return (
     <div className={cn("p-4 border rounded flex items-center", className)}>
-      <Button size="icon" variant="outline" onClick={() => setPause(!pause)}>
+      <Button
+        size="icon"
+        variant="outline"
+        className=""
+        onClick={() => setPause(!pause)}
+      >
         {pause ? <Pause /> : <Play />}
       </Button>
 
