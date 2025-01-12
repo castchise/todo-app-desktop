@@ -1,3 +1,4 @@
+import { setLocalStorageValue } from "@/lib/utils";
 import { TodoListItem } from "@/types";
 import { createContext, ReactElement, useContext, useState } from "react";
 
@@ -6,10 +7,12 @@ interface GlobalContextProps {
   setTodoList?: (updatedList: TodoListItem[]) => void;
   darkmode?: boolean;
   setDarkmode?: (theme: boolean) => void;
+  updateTodoItem: (id: string, updatedFileds: Partial<TodoListItem>) => void;
 }
 
 const defaultValues: GlobalContextProps = {
   todoList: [],
+  updateTodoItem: () => null,
 };
 
 const GlobalContext = createContext(defaultValues);
@@ -24,11 +27,24 @@ export function GlobalContextProvider({
   const [todoList, setTodoList] = useState(value?.todoList || []);
   const [darkmode, setDarkmode] = useState(value?.darkmode || false);
 
+  const updateTodoItem = (id: string, updatedFields: Partial<TodoListItem>) => {
+    setTodoList((prev) => {
+      const updatedList = prev.map((todoListItem) => {
+        if (todoListItem.id === id)
+          return { ...todoListItem, ...updatedFields };
+        return todoListItem;
+      });
+      setLocalStorageValue("todoList", updatedList);
+      return updatedList;
+    });
+  };
+
   const contextValue: GlobalContextProps = {
     todoList,
     setTodoList,
     darkmode,
     setDarkmode,
+    updateTodoItem,
   };
 
   return (

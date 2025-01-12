@@ -2,8 +2,8 @@
 import { TodoListItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { cn, setLocalStorageValue } from "@/lib/utils";
+import { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import duration from "dayjs/plugin/duration";
 import dayjs from "dayjs";
@@ -15,43 +15,51 @@ interface TaskItemProps extends TodoListItem {
 }
 
 export default function TaskItem(taskItem: TaskItemProps) {
-  const { name, timeSpent, paused, className } = taskItem;
+  const { name, timeSpent, paused, className, id } = taskItem;
   const truncatedName = name.substring(0, 75);
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
   const [isPaused, setIsPaused] = useState(paused);
   const [time, setTime] = useState(timeSpent);
-  const [intervalId, setIntervalId] = useState(null);
-  const { todoList } = useGlobalContext();
+  const { updateTodoItem } = useGlobalContext();
+
+  const intervalId = useRef<NodeJS.Timeout | null>(null);
 
   const handlePauseTask = () => {
     setIsPaused(true);
-    clearInterval(intervalId);
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
+      intervalId.current = null;
+    }
   };
 
   const handleContinueTask = () => {
+    if (!isPaused || intervalId.current) return;
+
     setIsPaused(false);
-    clearInterval(intervalId);
 
-    const id = setInterval(() => {
-      setTime((prevState) => {
-        const nextState = prevState + 1;
-
-        const updatedTodoList = todoList.map((todoListItem) => {
-          if (todoListItem.id === taskItem.id) {
-            return { ...todoListItem, timeSpent: nextState };
-          }
-          return todoListItem;
-        });
-        setLocalStorageValue("todoList", updatedTodoList);
-
-        return nextState;
-      });
+    intervalId.current = setInterval(() => {
+      setTime((prev) => prev + 1);
     }, 1000);
-
-    setIntervalId(id);
   };
 
-  useEffect(() => () => clearInterval(intervalId), []);
+  // Wait 2s for stable time value for LocalStorage update
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateTodoItem(id, { timeSpent: time });
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [time]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div
