@@ -68,6 +68,19 @@ export default function TaskItem(taskItem: TaskItemProps) {
     };
   }, []);
 
+  // Persist data when the window is closed or app is unmounted
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      updateTodoItem(id, { timeSpent: time });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [time, id]);
+
   return (
     <div
       className={cn(
