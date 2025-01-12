@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { TodoListItem } from "@/types";
 import { getTodoList, setTodoList } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
+import { v4 as uuid } from "uuid";
 
 const formSchema = z.object({
   taskName: z.string(),
@@ -31,7 +32,7 @@ export default function AddNewTodoForm() {
 
   function onSubmit({ taskName }: z.infer<typeof formSchema>) {
     const newTask: TodoListItem = {
-      id: "12121qqq", // TODO: uuid
+      id: uuid(),
       name: taskName,
       timeSpent: 0,
       isPaused: true,
