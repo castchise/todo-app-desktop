@@ -29,6 +29,8 @@
 import "./index.css";
 import "./index.tsx";
 
-console.log(
-  '👋 This message is being logged by "renderer.ts", included via Vite'
-);
+if (process.env.NODE_ENV === "development") {
+  console.log(
+    '👋 This message is being logged by "renderer.ts", included via Vite'
+  );
+}

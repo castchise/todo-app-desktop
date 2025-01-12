@@ -28,7 +28,9 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({ mode: "undocked" });
+  if (process.env.NODE_ENV === "development") {
+    mainWindow.webContents.openDevTools({ mode: "undocked" });
+  }
 
   // TODO: Do we need this? - Disable window resize
   // mainWindow.setResizable(false);
