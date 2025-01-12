@@ -6,10 +6,8 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -34,22 +32,20 @@ export function NewTaskForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
         <FormField
           control={form.control}
           name="task"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Task</FormLabel>
+            <FormItem className="flex-grow mr-4">
               <FormControl>
-                <Input placeholder="Task..." {...field} />
+                <Input placeholder="Write a new task..." {...field} />
               </FormControl>
-              <FormDescription>Task should be placed here.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Add</Button>
       </form>
     </Form>
   );
