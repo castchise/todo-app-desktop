@@ -20,7 +20,7 @@ export default function RootLayout() {
         {todoList.length > 0 ? (
           <TodoItemList todoList={todoList} className="mt-8" />
         ) : (
-          <p className="text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
+          <p className="flex justify-center items-center flex-grow text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
             No tasks to track yet...
           </p>
         )}
