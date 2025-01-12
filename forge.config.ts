@@ -59,9 +59,10 @@ const config: ForgeConfig = {
       config: {
         repository: {
           owner: "castchise",
-          name: "test-electron-repo",
+          name: "todo-app-desktop",
         },
         draft: true,
+        authCode: process.env.GITHUB_TOKEN,
       },
     },
   ],
