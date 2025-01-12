@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "cross-env NODE_ENV=development electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "env-cmd electron-forge publish",
@@ -53,6 +53,7 @@
     "@radix-ui/react-switch": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "electron-squirrel-startup": "^1.0.1",
     "env-cmd": "^10.1.0",
