@@ -1,22 +1,52 @@
 import { TodoListItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { cn, setLocalStorageValue } from "@/lib/utils";
+import { useGlobalContext } from "@/contexts";
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
 }
 
-export default function TaskItem({
-  name,
-  timeSpent,
-  paused,
-  className,
-}: TaskItemProps) {
+export default function TaskItem(taskItem: TaskItemProps) {
+  const { name, timeSpent, paused, className } = taskItem;
   const truncatedName = name.substring(0, 75);
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
   const [isPaused, setIsPaused] = useState(paused);
+  const [time, setTime] = useState(timeSpent);
+  const [intervalId, setIntervalId] = useState(null);
+  const { todoList } = useGlobalContext();
+
+  const handlePauseTask = () => {
+    setIsPaused(true);
+    clearInterval(intervalId);
+  };
+
+  const handleContinueTask = () => {
+    setIsPaused(false);
+    clearInterval(intervalId);
+
+    const id = setInterval(() => {
+      setTime((prevState) => {
+        const nextState = prevState + 1;
+
+        const updatedTodoList = todoList.map((todoListItem) => {
+          if (todoListItem.id === taskItem.id) {
+            return { ...todoListItem, timeSpent: nextState };
+          }
+          return todoListItem;
+        });
+        setLocalStorageValue("todoList", updatedTodoList);
+
+        return nextState;
+      });
+    }, 1000);
+
+    setIntervalId(id);
+  };
+
+  useEffect(() => () => clearInterval(intervalId), []);
 
   return (
     <div
@@ -29,9 +59,9 @@ export default function TaskItem({
         size="icon"
         variant="outline"
         className="dark:bg-gray-900 flex-shrink-0"
-        onClick={() => setIsPaused(!isPaused)}
+        onClick={() => (isPaused ? handleContinueTask() : handlePauseTask())}
       >
-        {isPaused ? <Pause /> : <Play />}
+        {isPaused ? <Play /> : <Pause />}
       </Button>
 
       <p className="font-semibold self-center order-last w-full flex-grow mt-4 sm:mt-0 sm:order-none sm:mx-4">
@@ -48,7 +78,7 @@ export default function TaskItem({
       </p>
 
       <div className="ml-auto flex items-center">
-        <p>{timeSpent}:00:00</p>
+        <p>{time}</p>
         <Button size="icon" variant="ghost" className="ml-4">
           <Trash2 />
         </Button>
