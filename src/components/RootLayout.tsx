@@ -1,6 +1,8 @@
 import AddNewTodoForm from "@/components/AddNewTodoForm";
 import TodoItemList from "@/components/TodoItemList";
 import { useGlobalContext } from "@/contexts";
+import { Separator } from "@/components/ui/separator";
+import DarkThemeSwitch from "./DarkThemeSwitch";
 
 export default function RootLayout() {
   const { todoList } = useGlobalContext();
@@ -10,14 +12,18 @@ export default function RootLayout() {
       <AddNewTodoForm />
 
       {todoList.length > 0 ? (
-        <TodoItemList todoList={todoList} />
+        <TodoItemList todoList={todoList} className="mt-8" />
       ) : (
-        <div className="flex-grow flex justify-center items-center">
-          <p className="text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
-            No tasks to track yet...
-          </p>
-        </div>
+        <p className="text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
+          No tasks to track yet...
+        </p>
       )}
+
+      <Separator className="my-8" />
+      <div className="w-full flex items-center justify-between">
+        <DarkThemeSwitch />
+        <p className="font-semibold text-sm">Total: 00:00:00</p>
+      </div>
     </div>
   );
 }
