@@ -8,11 +8,13 @@ interface GlobalContextProps {
   darkmode?: boolean;
   setDarkmode?: (theme: boolean) => void;
   updateTodoItem: (id: string, updatedFileds: Partial<TodoListItem>) => void;
+  removeTodoItem: (id: string) => void;
 }
 
 const defaultValues: GlobalContextProps = {
   todoList: [],
   updateTodoItem: () => null,
+  removeTodoItem: () => null,
 };
 
 const GlobalContext = createContext(defaultValues);
@@ -39,12 +41,22 @@ export function GlobalContextProvider({
     });
   };
 
+  const removeTodoItem = (id: string) => {
+    setTodoList((prev) => {
+      const updatedList = prev.filter((todoListItem) => todoListItem.id !== id);
+      console.log(updatedList);
+      setLocalStorageValue("todoList", updatedList);
+      return updatedList;
+    });
+  };
+
   const contextValue: GlobalContextProps = {
     todoList,
     setTodoList,
     darkmode,
     setDarkmode,
     updateTodoItem,
+    removeTodoItem,
   };
 
   return (

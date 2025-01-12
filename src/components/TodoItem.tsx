@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import duration from "dayjs/plugin/duration";
 import dayjs from "dayjs";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 dayjs.extend(duration);
 
@@ -20,7 +21,8 @@ export default function TaskItem(taskItem: TaskItemProps) {
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
   const [isPaused, setIsPaused] = useState(paused);
   const [time, setTime] = useState(timeSpent);
-  const { updateTodoItem } = useGlobalContext();
+  const [isRemovingItem, setIsRemovingItem] = useState(false);
+  const { updateTodoItem, removeTodoItem } = useGlobalContext();
 
   const intervalId = useRef<NodeJS.Timeout | null>(null);
 
@@ -40,6 +42,11 @@ export default function TaskItem(taskItem: TaskItemProps) {
     intervalId.current = setInterval(() => {
       setTime((prev) => prev + 1);
     }, 1000);
+  };
+
+  const handleRemoveTask = () => {
+    handlePauseTask();
+    setIsRemovingItem(true);
   };
 
   // Wait 2s for stable time value for LocalStorage update
@@ -92,10 +99,21 @@ export default function TaskItem(taskItem: TaskItemProps) {
 
       <div className="ml-auto flex items-center">
         <p>{dayjs.duration(time, "seconds").format("HH:mm:ss")}</p>
-        <Button size="icon" variant="ghost" className="ml-4">
+        <Button
+          size="icon"
+          variant="ghost"
+          className="ml-4"
+          onClick={handleRemoveTask}
+        >
           <Trash2 />
         </Button>
       </div>
+
+      <ConfirmationDialog
+        open={isRemovingItem}
+        onOpenChange={setIsRemovingItem}
+        onSubmit={() => removeTodoItem(taskItem.id)}
+      />
     </div>
   );
 }
