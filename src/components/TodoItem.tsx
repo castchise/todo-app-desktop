@@ -1,19 +1,34 @@
 import { TodoListItem } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Play, Pause, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-export default function TaskItem({ name, timeSpent, isPaused }: TodoListItem) {
+interface TaskItemProps extends TodoListItem {
+  className?: string;
+}
+
+export default function TaskItem({
+  name,
+  timeSpent,
+  isPaused,
+  className,
+}: TaskItemProps) {
+  const [pause, setPause] = useState(isPaused);
+
   return (
-    <div className="p-2 bg-slate-400 rounded flex space-x-2">
-      <div>
-        <p>Name: </p>
-        <p>{name}</p>
-      </div>
-      <div>
-        <p>timeSpent: </p>
-        <p>{timeSpent}</p>
-      </div>
-      <div>
-        <p>isPaused: </p>
-        <p>{isPaused}</p>
+    <div className={cn("p-4 border rounded flex items-center", className)}>
+      <Button size="icon" variant="outline" onClick={() => setPause(!pause)}>
+        {pause ? <Pause /> : <Play />}
+      </Button>
+
+      <p className="ml-4 font-semibold">{name}</p>
+
+      <div className="ml-auto flex items-center">
+        <p>{timeSpent}:00:00</p>
+        <Button size="icon" variant="ghost" className="ml-4">
+          <Trash2 />
+        </Button>
       </div>
     </div>
   );
