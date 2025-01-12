@@ -11,23 +11,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { TodoListItem } from "@/types";
+import { getTodoList, setTodoList } from "@/lib/utils";
+import { useGlobalContext } from "@/contexts";
 
 const formSchema = z.object({
-  task: z.string(),
+  taskName: z.string(),
 });
 
 export default function AddNewTodoForm() {
+  const context = useGlobalContext();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      task: "",
+      taskName: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  function onSubmit({ taskName }: z.infer<typeof formSchema>) {
+    const newTask: TodoListItem = {
+      id: "12121qqq", // TODO: uuid
+      name: taskName,
+      timeSpent: 0,
+      isPaused: true,
+    };
+
+    const todoList = getTodoList();
+    const updatedTodoList = [...todoList, newTask];
+    context.setTodoList(updatedTodoList);
+    setTodoList(updatedTodoList);
+
+    form.reset();
   }
 
   return (
@@ -35,7 +50,7 @@ export default function AddNewTodoForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
         <FormField
           control={form.control}
-          name="task"
+          name="taskName"
           render={({ field }) => (
             <FormItem className="flex-grow mr-4">
               <FormControl>
