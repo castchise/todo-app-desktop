@@ -21,7 +21,7 @@ export default function TaskItem({
       <Button
         size="icon"
         variant="outline"
-        className=""
+        className="dark:bg-gray-900"
         onClick={() => setPause(!pause)}
       >
         {pause ? <Pause /> : <Play />}

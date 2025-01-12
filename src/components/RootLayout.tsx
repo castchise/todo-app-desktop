@@ -11,7 +11,9 @@ export default function RootLayout() {
   return (
     <div className={cn(darkmode && "dark")}>
       <div
-        className={"w-full h-screen p-4 flex flex-col sm:p-8 dark:bg-gray-600"}
+        className={
+          "w-full h-screen p-4 flex flex-col sm:p-8 dark:bg-gray-900 dark:text-white"
+        }
       >
         <AddNewTodoForm />
 
