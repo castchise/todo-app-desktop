@@ -35,11 +35,11 @@ export default function AddNewTodoForm() {
       id: uuid(),
       name: taskName,
       timeSpent: 0,
-      isPaused: true,
+      paused: true,
     };
 
     const todoList = getTodoList();
-    const updatedTodoList = [...todoList, newTask];
+    const updatedTodoList = [newTask, ...todoList];
     context.setTodoList(updatedTodoList);
     setLocalStorageValue("todoList", updatedTodoList);
 

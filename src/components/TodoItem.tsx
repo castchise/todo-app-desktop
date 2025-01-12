@@ -11,23 +11,41 @@ interface TaskItemProps extends TodoListItem {
 export default function TaskItem({
   name,
   timeSpent,
-  isPaused,
+  paused,
   className,
 }: TaskItemProps) {
-  const [pause, setPause] = useState(isPaused);
+  const truncatedName = name.substring(0, 75);
+  const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
+  const [isPaused, setIsPaused] = useState(paused);
 
   return (
-    <div className={cn("p-4 border rounded flex items-center", className)}>
+    <div
+      className={cn(
+        "p-4 border rounded flex items-start flex-wrap sm:flex-nowrap",
+        className
+      )}
+    >
       <Button
         size="icon"
         variant="outline"
-        className="dark:bg-gray-900"
-        onClick={() => setPause(!pause)}
+        className="dark:bg-gray-900 flex-shrink-0"
+        onClick={() => setIsPaused(!isPaused)}
       >
-        {pause ? <Pause /> : <Play />}
+        {isPaused ? <Pause /> : <Play />}
       </Button>
 
-      <p className="ml-4 font-semibold">{name}</p>
+      <p className="font-semibold self-center order-last w-full flex-grow mt-4 sm:mt-0 sm:order-none sm:mx-4">
+        {isShowTruncatedText ? truncatedName : name}
+        {name.length > 75 && (
+          <button
+            type="button"
+            onClick={() => setIsShowTruncatedText(!isShowTruncatedText)}
+            className="hover:underline ml-0.5"
+          >
+            [...]
+          </button>
+        )}
+      </p>
 
       <div className="ml-auto flex items-center">
         <p>{timeSpent}:00:00</p>
