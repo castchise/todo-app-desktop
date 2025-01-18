@@ -16,20 +16,18 @@ export default function TodoItemList({
   const [selectedItem, setSelectedItem] = useArrowNavigation({ todoList });
 
   return (
-    <div>
-      <ScrollArea className={cn("h-screen", className)}>
-        {todoList.map((todoListItem) => (
-          <TodoItem
-            key={todoListItem.id}
-            className={cn(
-              "mb-4",
-              selectedItem.id === todoListItem.id && "border border-red-500"
-            )}
-            setActive={() => setSelectedItem(todoListItem)}
-            {...todoListItem}
-          />
-        ))}
-      </ScrollArea>
-    </div>
+    <ScrollArea className={cn("h-screen", className)}>
+      {todoList.map((todoListItem) => (
+        <TodoItem
+          key={todoListItem.id}
+          className={cn(
+            "mb-4",
+            selectedItem.id === todoListItem.id && "border border-red-500"
+          )}
+          setActive={() => setSelectedItem(todoListItem)}
+          {...todoListItem}
+        />
+      ))}
+    </ScrollArea>
   );
 }
