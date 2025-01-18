@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { cn, formatDurationToHours } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import ConfirmationDialog from "./ConfirmationDialog";
+import EditTime from "./EditTime";
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
@@ -17,6 +18,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
   const [isPaused, setIsPaused] = useState(paused);
   const [time, setTime] = useState(timeSpent);
   const [isRemovingItem, setIsRemovingItem] = useState(false);
+  const [isEditingTime, setIsEditingTime] = useState(false);
   const { updateTodoItem, removeTodoItem } = useGlobalContext();
 
   const intervalId = useRef<NodeJS.Timeout | null>(null);
@@ -106,13 +108,22 @@ export default function TaskItem(taskItem: TaskItemProps) {
       </p>
 
       <div className="ml-auto flex items-center">
-        <p>{formatDurationToHours(time)}</p>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="ml-4"
-          onClick={handleRemoveTask}
-        >
+        {isEditingTime ? (
+          <EditTime
+            time={time}
+            setTime={setTime}
+            setIsEditing={setIsEditingTime}
+          />
+        ) : (
+          <Button
+            variant="ghost"
+            className="font-normal text-md"
+            onClick={() => setIsEditingTime(true)}
+          >
+            {formatDurationToHours(time)}
+          </Button>
+        )}
+        <Button size="icon" variant="ghost" onClick={handleRemoveTask}>
           <Trash2 />
         </Button>
       </div>
