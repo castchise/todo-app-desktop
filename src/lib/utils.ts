@@ -80,3 +80,28 @@ export function formatDurationToMs(duration: string) {
 
   return d.asSeconds();
 }
+
+export function createDynamicMask(timeInMs: number) {
+  /*
+    Create dynamic mask - where first 'hours' part is calculated from initial hours digit amount
+    Exmples:
+      10:20:11 => --:--:--
+      100:20:11 => ---:--:--
+      1000:20:11 => ----:--:-- 
+      ...
+  */
+  const initialTimeValue = formatDurationToHours(timeInMs);
+  const [hours] = initialTimeValue.split(":");
+  const hoursPlaceholder = [...Array.from(hours).map(() => /\d/)];
+  const timeMask = [
+    ...hoursPlaceholder,
+    ":",
+    /[0-5]/,
+    /\d/,
+    ":",
+    /[0-5]/,
+    /\d/,
+  ];
+
+  return timeMask;
+}
