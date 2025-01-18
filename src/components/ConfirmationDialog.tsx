@@ -9,8 +9,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import React from "react";
-
 interface ConfirmationDialogProps {
   open: boolean;
   onOpenChange: (isOpen: boolean) => void;
@@ -37,7 +35,9 @@ export default function ConfirmationDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit}>Continue</AlertDialogAction>
+          <AlertDialogAction autoFocus onClick={onSubmit}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
