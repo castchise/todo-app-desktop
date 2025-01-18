@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface useTaskDurationProps {
   timeSpent: number;
@@ -30,6 +30,13 @@ export default function useTaskDuration({
       setTime((prev) => prev + 1);
     }, 1000);
   };
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      pauseTaskDuration();
+    };
+  }, []);
 
   return { time, setTime, isPaused, pauseTaskDuration, resumeTaskDuration };
 }

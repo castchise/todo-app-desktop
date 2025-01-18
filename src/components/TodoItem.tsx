@@ -55,13 +55,6 @@ export default function TaskItem(taskItem: TaskItemProps) {
     return () => clearTimeout(timeoutId);
   }, [time]);
 
-  // Cleanup
-  useEffect(() => {
-    return () => {
-      pauseTaskDuration();
-    };
-  }, []);
-
   // Persist data when the window is closed or app is unmounted
   useEffect(() => {
     const handleBeforeUnload = () => {
