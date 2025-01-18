@@ -9,10 +9,11 @@ import EditTime from "./EditTime";
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
+  setActive: () => void;
 }
 
 export default function TaskItem(taskItem: TaskItemProps) {
-  const { name, timeSpent, paused, className, id } = taskItem;
+  const { name, timeSpent, paused, className, id, setActive } = taskItem;
   const truncatedName = name.substring(0, 75);
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
   const [isPaused, setIsPaused] = useState(paused);
@@ -24,6 +25,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
   const intervalId = useRef<NodeJS.Timeout | null>(null);
 
   const handlePauseTask = () => {
+    setActive();
     setIsPaused(true);
     if (intervalId.current) {
       clearInterval(intervalId.current);
@@ -34,6 +36,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
   const handleContinueTask = () => {
     if (!isPaused || intervalId.current) return;
 
+    setActive();
     setIsPaused(false);
 
     intervalId.current = setInterval(() => {
@@ -43,7 +46,13 @@ export default function TaskItem(taskItem: TaskItemProps) {
 
   const handleRemoveTask = () => {
     handlePauseTask();
+    setActive();
     setIsRemovingItem(true);
+  };
+
+  const handleEditTaskTime = () => {
+    setActive();
+    setIsEditingTime(true);
   };
 
   // Wait 2s for stable time value for LocalStorage update
@@ -118,7 +127,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
           <Button
             variant="ghost"
             className="font-normal text-md"
-            onClick={() => setIsEditingTime(true)}
+            onClick={handleEditTaskTime}
           >
             {formatDurationToHours(time)}
           </Button>
