@@ -1,11 +1,12 @@
 import { TodoListItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Trash2 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { cn, formatDurationToHours } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import ConfirmationDialog from "./ConfirmationDialog";
 import EditTime from "./EditTime";
+import { useTaskDuration } from "@/hooks";
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
@@ -16,32 +17,22 @@ export default function TaskItem(taskItem: TaskItemProps) {
   const { name, timeSpent, paused, className, id, setActive } = taskItem;
   const truncatedName = name.substring(0, 75);
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
-  const [isPaused, setIsPaused] = useState(paused);
-  const [time, setTime] = useState(timeSpent);
   const [isRemovingItem, setIsRemovingItem] = useState(false);
   const [isEditingTime, setIsEditingTime] = useState(false);
   const { updateTodoItem, removeTodoItem } = useGlobalContext();
-
-  const intervalId = useRef<NodeJS.Timeout | null>(null);
+  const { time, setTime, isPaused, pauseTaskDuration, resumeTaskDuration } =
+    useTaskDuration({ timeSpent, paused });
 
   const handlePauseTask = () => {
     setActive();
-    setIsPaused(true);
-    if (intervalId.current) {
-      clearInterval(intervalId.current);
-      intervalId.current = null;
-    }
+    pauseTaskDuration();
   };
 
   const handleContinueTask = () => {
-    if (!isPaused || intervalId.current) return;
+    if (!isPaused) return;
 
     setActive();
-    setIsPaused(false);
-
-    intervalId.current = setInterval(() => {
-      setTime((prev) => prev + 1);
-    }, 1000);
+    resumeTaskDuration();
   };
 
   const handleRemoveTask = () => {
@@ -67,10 +58,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
   // Cleanup
   useEffect(() => {
     return () => {
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
-      }
+      pauseTaskDuration();
     };
   }, []);
 
