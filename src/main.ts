@@ -14,6 +14,7 @@ const createWindow = () => {
     height: 768,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      backgroundThrottling: false,
     },
     icon: `${__dirname}/dist/assets/icon.ico`,
   });
