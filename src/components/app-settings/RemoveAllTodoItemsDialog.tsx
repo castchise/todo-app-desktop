@@ -1,31 +1,25 @@
-import { useState } from "react";
-import ConfirmationDialog from "../ConfirmationDialog";
 import { Button } from "../ui/button";
 import { useGlobalContext } from "@/contexts";
+import { useRemoveAllTasksDialog } from "@/hooks";
 import { Trash2 } from "lucide-react";
 
 export function RemoveAllTodoItemsDialog() {
-  const [isRemovingItems, setIsRemovingItems] = useState(false);
-  const { todoList, removeAllTodoItems } = useGlobalContext();
-  return (
-    <>
-      <div className="flex items-center">
-        <Button
-          disabled={todoList.length === 0}
-          onClick={() => setIsRemovingItems(true)}
-          variant="ghost"
-          size="icon"
-        >
-          <Trash2 color="red" />
-        </Button>
-        <p className="font-semibold ml-2 text-red-500">Remove all Tasks</p>
-      </div>
+  const { todoList } = useGlobalContext();
+  const { setIsRemovingItems } = useRemoveAllTasksDialog();
 
-      <ConfirmationDialog
-        open={isRemovingItems}
-        onOpenChange={setIsRemovingItems}
-        onSubmit={() => removeAllTodoItems()}
-      />
-    </>
+  return (
+    <div className="flex items-center">
+      <Button
+        disabled={todoList.length === 0}
+        onClick={() => setIsRemovingItems(true)}
+        variant="ghost"
+        size="icon"
+      >
+        <Trash2 color="red" />
+      </Button>
+      <p className="font-semibold ml-2 text-sm text-red-500">
+        Remove all Tasks
+      </p>
+    </div>
   );
 }

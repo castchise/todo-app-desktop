@@ -1,13 +1,12 @@
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import DarkThemeSwitch from "./DarkThemeSwitch";
@@ -17,8 +16,8 @@ import { LayoutGrid, Settings, Keyboard } from "lucide-react";
 
 export default function AppSettingsDialog() {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
+    <Dialog>
+      <DialogTrigger asChild>
         <Button
           variant="ghost"
           onKeyDown={(e) => e.preventDefault()}
@@ -27,14 +26,14 @@ export default function AppSettingsDialog() {
           <LayoutGrid />
           Settings
         </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Application Settings</AlertDialogTitle>
-          <AlertDialogDescription className="space-y-6">
-            <div className="mt-2">
-              <h3 className="flex items-center font-semibold text-lg mb-4 space-x-2">
-                <Settings size={25} /> <span>Settings</span>
+      </DialogTrigger>
+      <DialogContent aria-describedby={undefined}>
+        <DialogHeader>
+          <DialogTitle className="mb-4">Application Settings</DialogTitle>
+          <div className="space-y-6 text-slate-600">
+            <div>
+              <h3 className="flex items-center font-semibold mb-4 space-x-2">
+                <Settings style={{ color: "inherit" }} /> <span>Settings</span>
               </h3>
               <div className="mt-6 space-y-4">
                 <DarkThemeSwitch />
@@ -45,9 +44,9 @@ export default function AppSettingsDialog() {
             <Separator />
 
             <div>
-              <h2 className="flex items-center font-semibold text-lg mb-4 space-x-2">
-                <Keyboard /> <span>Keybinds</span>
-              </h2>
+              <h3 className="flex items-center font-semibold mb-4 space-x-2">
+                <Keyboard style={{ color: "inherit" }} /> <span>Keybinds</span>
+              </h3>
               <div className="mt-6 space-y-6">
                 <div className="space-y-4">
                   <KeybindRow
@@ -76,12 +75,16 @@ export default function AppSettingsDialog() {
                 </div>
               </div>
             </div>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Close</AlertDialogCancel>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </div>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Close
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
