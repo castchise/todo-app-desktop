@@ -1,5 +1,5 @@
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Moon } from "lucide-react";
 import { useGlobalContext } from "@/contexts";
 import { setLocalStorageValue } from "@/lib/utils";

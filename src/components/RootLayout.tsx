@@ -1,13 +1,11 @@
 import AddNewTodoForm from "@/components/AddNewTodoForm";
 import TodoItemList from "@/components/TodoItemList";
-import { useGlobalContext } from "@/contexts";
 import { Separator } from "@/components/ui/separator";
-import DarkThemeSwitch from "./DarkThemeSwitch";
+import AppSettingsDialog from "@/components/app-settings/AppSettingsDialog";
+import { useGlobalContext } from "@/contexts";
 import { cn, formatDurationToHours } from "@/lib/utils";
 import { useMemo } from "react";
 import { useArrowNavigation } from "@/hooks";
-import { KeybindsDialog } from "./keybinds/KeybindsDialog";
-import { RemoveAllTodoItemsDialog } from "./RemoveAllTodoItemsDialog";
 
 export default function RootLayout() {
   const { todoList, darkmode } = useGlobalContext();
@@ -41,11 +39,7 @@ export default function RootLayout() {
 
         <Separator className="my-8" />
         <div className="w-full flex items-center justify-between">
-          <div className="flex items-center space-x-5">
-            <DarkThemeSwitch />
-            <KeybindsDialog />
-            <RemoveAllTodoItemsDialog />
-          </div>
+          <AppSettingsDialog />
           <p className="font-semibold text-sm">
             Total: {formatDurationToHours(totalDuration)}
           </p>
