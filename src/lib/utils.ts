@@ -27,6 +27,31 @@ export function getIsDarkmode() {
     : false;
 }
 
+function normalizeDuration(duration: string) {
+  /*
+    Test if duration matches HH:mm:ss format (hours could exceed 23)
+    If provided value contains singular digit - append leading zero to it
+
+    1 => error
+    1:20:00 => 01:20:00
+    1:0:1 => 01:00:01
+    02:10:5 => 02:10:05
+    and so on..
+  */
+
+  const regex = /^(\d+):(\d{1,2}):(\d{1,2})$/;
+
+  if (!regex.test(duration)) throw new Error("please enter valid duration");
+
+  const [, hours, minutes, seconds] = duration.match(regex);
+
+  const paddedHours = hours.padStart(2, "0");
+  const paddedMinutes = minutes.padStart(2, "0");
+  const paddedSeconds = seconds.padStart(2, "0");
+
+  return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
+}
+
 export function formatDurationToHours(seconds: number) {
   const d = dayjs.duration(seconds, "seconds");
 
@@ -37,4 +62,21 @@ export function formatDurationToHours(seconds: number) {
   return `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
     .padStart(2, "0")}:${secondsFormatted.toString().padStart(2, "0")}`;
+}
+
+export function formatDurationToMs(duration: string) {
+  const normalizedDuration = normalizeDuration(duration);
+
+  // Extract duration parts from initial value and convert to Number so it would fit dayjs method
+  const [hours, minutes, seconds] = normalizedDuration
+    .split(":")
+    .map((durationPart) => Number(durationPart));
+
+  const d = dayjs.duration({
+    seconds,
+    minutes,
+    hours,
+  });
+
+  return d.asSeconds();
 }
