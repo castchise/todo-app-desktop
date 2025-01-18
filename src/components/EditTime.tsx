@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
-import { formatDurationToHours, formatDurationToMs } from "@/lib/utils";
-import { Button } from "./ui/button";
+import {
+  createDynamicMask,
+  formatDurationToHours,
+  formatDurationToMs,
+} from "@/lib/utils";
+import MaskedInput from "react-text-mask";
 
 interface EditTimeProps {
   time: number;
@@ -22,38 +26,41 @@ export default function EditTime({
     setIsEditing(false);
   };
 
-  //   useEffect(() => {
-  //     const handleKeyUp = (e: KeyboardEvent) => {
-  //       switch (e.key) {
-  //         case "Enter": {
-  //           alert("Enter");
-  //           break;
-  //         }
-  //         case "Escape": {
-  //           alert("Escape");
-  //           break;
-  //         }
-  //         default:
-  //         //no-op
-  //       }
-  //     };
+  useEffect(() => {
+    const handleKeyUp = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "Enter": {
+          handleChange(changeTime);
+          break;
+        }
+        case "Escape": {
+          setIsEditing(false);
+          break;
+        }
+        default:
+        //no-op
+      }
+    };
 
-  //     document.addEventListener("keyup", handleKeyUp);
+    document.addEventListener("keyup", handleKeyUp);
 
-  //     return () => document.removeEventListener("keyup", handleKeyUp);
-  //   }, []);
+    return () => document.removeEventListener("keyup", handleKeyUp);
+  }, [handleChange]);
 
   return (
-    <div className="flex items-center">
-      <Input
-        autoFocus
-        value={changeTime}
-        onChange={(e) => setChangeTime(e.target.value)}
-      />
-
-      <Button type="button" onClick={() => handleChange(changeTime)}>
-        Ok
-      </Button>
-    </div>
+    <MaskedInput
+      mask={createDynamicMask(time)}
+      value={changeTime}
+      onChange={(e) => setChangeTime(e.target.value)}
+      placeholder="00:00:00"
+      render={(ref, props) => (
+        <Input
+          autoFocus
+          ref={ref}
+          className="text-center w-[100px] !text-[16px] !py-1"
+          {...props}
+        />
+      )}
+    />
   );
 }
