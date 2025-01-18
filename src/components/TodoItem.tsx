@@ -11,42 +11,44 @@ import { useTaskDuration, useTaskHotkeys } from "@/hooks";
 interface TaskItemProps extends TodoListItem {
   className?: string;
   isActive: boolean;
-  setActive: () => void;
+  setSelectedItem: (value: TodoListItem) => void;
 }
 
 export default function TaskItem(taskItem: TaskItemProps) {
-  const { name, timeSpent, paused, className, id, isActive, setActive } =
+  const { name, timeSpent, paused, className, id, isActive, setSelectedItem } =
     taskItem;
   const truncatedName = name.substring(0, 75);
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
   const [isRemovingItem, setIsRemovingItem] = useState(false);
   const [isEditingTime, setIsEditingTime] = useState(false);
-  const { updateTodoItem, removeTodoItem } = useGlobalContext();
+  const { updateTodoItem, removeTodoItem, todoList } = useGlobalContext();
   const { time, setTime, isPaused, pauseTaskDuration, resumeTaskDuration } =
     useTaskDuration({ timeSpent, paused });
 
+  const setCurrentItemActive = () => setSelectedItem(taskItem);
+
   const handlePauseTask = () => {
-    setActive();
+    setCurrentItemActive();
     pauseTaskDuration();
   };
 
   const handleContinueTask = () => {
     if (!isPaused) return;
 
-    setActive();
+    setCurrentItemActive();
     resumeTaskDuration();
   };
 
   const handleRemoveTask = () => {
     handlePauseTask();
     setIsEditingTime(false);
-    setActive();
+    setCurrentItemActive();
     setIsRemovingItem(true);
   };
 
   const handleEditTaskTime = () => {
     handlePauseTask();
-    setActive();
+    setCurrentItemActive();
     setIsEditingTime(true);
   };
 
@@ -117,7 +119,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
             setTime={setTime}
             setIsEditing={setIsEditingTime}
             isActiveItem={isActive}
-            setActiveItem={setActive}
+            setActiveItem={setCurrentItemActive}
           />
         ) : (
           <Button
@@ -136,7 +138,17 @@ export default function TaskItem(taskItem: TaskItemProps) {
       <ConfirmationDialog
         open={isRemovingItem}
         onOpenChange={setIsRemovingItem}
-        onSubmit={() => removeTodoItem(taskItem.id)}
+        onSubmit={() => {
+          const currentIndex = todoList.findIndex(
+            (todoListItem) => todoListItem.id === taskItem.id
+          );
+          const nextItem =
+            currentIndex === todoList.length - 1
+              ? todoList[0]
+              : todoList[currentIndex + 1];
+          setSelectedItem(nextItem);
+          removeTodoItem(taskItem.id);
+        }}
       />
     </div>
   );

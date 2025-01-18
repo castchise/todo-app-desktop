@@ -26,7 +26,7 @@ export default function TodoItemList({
             selectedItem?.id === todoListItem?.id && "border border-red-500"
           )}
           isActive={selectedItem?.id === todoListItem?.id}
-          setActive={() => setSelectedItem(todoListItem)}
+          setSelectedItem={setSelectedItem}
           {...todoListItem}
         />
       ))}
