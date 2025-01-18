@@ -10,11 +10,13 @@ import { useTaskDuration } from "@/hooks";
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
+  isActive: boolean;
   setActive: () => void;
 }
 
 export default function TaskItem(taskItem: TaskItemProps) {
-  const { name, timeSpent, paused, className, id, setActive } = taskItem;
+  const { name, timeSpent, paused, className, id, isActive, setActive } =
+    taskItem;
   const truncatedName = name.substring(0, 75);
   const [isShowTruncatedText, setIsShowTruncatedText] = useState(true);
   const [isRemovingItem, setIsRemovingItem] = useState(false);
@@ -103,6 +105,8 @@ export default function TaskItem(taskItem: TaskItemProps) {
             time={time}
             setTime={setTime}
             setIsEditing={setIsEditingTime}
+            isActiveItem={isActive}
+            setActiveItem={setActive}
           />
         ) : (
           <Button

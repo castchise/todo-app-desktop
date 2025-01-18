@@ -11,26 +11,37 @@ interface EditTimeProps {
   time: number;
   setTime: (value: number) => void;
   setIsEditing: (value: boolean) => void;
+  isActiveItem: boolean;
+  setActiveItem: () => void;
 }
 
 export default function EditTime({
   time,
   setTime,
   setIsEditing,
+  isActiveItem,
+  setActiveItem,
 }: EditTimeProps) {
   const [changeTime, setChangeTime] = useState(formatDurationToHours(time));
 
-  const handleChange = (updatedTime: string) => {
+  const handleTimeChange = (updatedTime: string) => {
     const msValue = formatDurationToMs(updatedTime);
     setTime(msValue);
     setIsEditing(false);
   };
 
+  const handleInputChange = (updatedTime: string) => {
+    setActiveItem();
+    setChangeTime(updatedTime);
+  };
+
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent) => {
+      if (!isActiveItem) return;
+
       switch (e.key) {
         case "Enter": {
-          handleChange(changeTime);
+          handleTimeChange(changeTime);
           break;
         }
         case "Escape": {
@@ -45,13 +56,14 @@ export default function EditTime({
     document.addEventListener("keyup", handleKeyUp);
 
     return () => document.removeEventListener("keyup", handleKeyUp);
-  }, [handleChange]);
+  }, [handleTimeChange]);
 
   return (
     <MaskedInput
       mask={createDynamicMask(time)}
       value={changeTime}
-      onChange={(e) => setChangeTime(e.target.value)}
+      onClick={() => setActiveItem()}
+      onChange={(e) => handleInputChange(e.target.value)}
       placeholder="00:00:00"
       render={(ref, props) => (
         <Input
