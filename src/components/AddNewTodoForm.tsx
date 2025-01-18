@@ -15,13 +15,21 @@ import { TodoListItem } from "@/types";
 import { getTodoList, setLocalStorageValue } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import { v4 as uuid } from "uuid";
+import { useEffect, useRef } from "react";
 
 const formSchema = z.object({
   taskName: z.string(),
 });
 
-export default function AddNewTodoForm() {
+interface AddNewTodoFormProps {
+  setSelectedItem: (value: TodoListItem) => void;
+}
+
+export default function AddNewTodoForm({
+  setSelectedItem,
+}: AddNewTodoFormProps) {
   const context = useGlobalContext();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,7 +38,7 @@ export default function AddNewTodoForm() {
     },
   });
 
-  function onSubmit({ taskName }: z.infer<typeof formSchema>) {
+  const onSubmit = ({ taskName }: z.infer<typeof formSchema>) => {
     const newTask: TodoListItem = {
       id: uuid(),
       name: taskName,
@@ -44,7 +52,24 @@ export default function AddNewTodoForm() {
     setLocalStorageValue("todoList", updatedTodoList);
 
     form.reset();
-  }
+    inputRef.current.blur();
+    setSelectedItem(updatedTodoList[0]);
+  };
+
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (!e.ctrlKey || e.code !== "KeyN") return;
+
+    setSelectedItem(null);
+    form.setFocus("taskName");
+  };
+
+  useEffect(() => {
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
 
   return (
     <Form {...form}>
@@ -54,7 +79,7 @@ export default function AddNewTodoForm() {
           name="taskName"
           render={({ field }) => (
             <FormItem className="flex-grow mr-4">
-              <FormControl>
+              <FormControl ref={inputRef}>
                 <Input placeholder="Write a new task..." {...field} />
               </FormControl>
               <FormMessage />
