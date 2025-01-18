@@ -6,6 +6,7 @@ import DarkThemeSwitch from "./DarkThemeSwitch";
 import { cn, formatDurationToHours } from "@/lib/utils";
 import { useMemo } from "react";
 import { useArrowNavigation } from "@/hooks";
+import { KeybindsDialog } from "./keybinds/KeybindsDialog";
 
 export default function RootLayout() {
   const { todoList, darkmode } = useGlobalContext();
@@ -39,7 +40,10 @@ export default function RootLayout() {
 
         <Separator className="my-8" />
         <div className="w-full flex items-center justify-between">
-          <DarkThemeSwitch />
+          <div className="flex items-center space-x-5">
+            <DarkThemeSwitch />
+            <KeybindsDialog />
+          </div>
           <p className="font-semibold text-sm">
             Total: {formatDurationToHours(totalDuration)}
           </p>
