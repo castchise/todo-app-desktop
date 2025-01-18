@@ -6,7 +6,7 @@ import { cn, formatDurationToHours } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import ConfirmationDialog from "./ConfirmationDialog";
 import EditTime from "./EditTime";
-import { useTaskDuration } from "@/hooks";
+import { useTaskDuration, useTaskHotkeys } from "@/hooks";
 
 interface TaskItemProps extends TodoListItem {
   className?: string;
@@ -39,14 +39,25 @@ export default function TaskItem(taskItem: TaskItemProps) {
 
   const handleRemoveTask = () => {
     handlePauseTask();
+    setIsEditingTime(false);
     setActive();
     setIsRemovingItem(true);
   };
 
   const handleEditTaskTime = () => {
+    handlePauseTask();
     setActive();
     setIsEditingTime(true);
   };
+
+  useTaskHotkeys({
+    isActive,
+    isPaused,
+    handlePauseTask,
+    handleContinueTask,
+    handleEditTaskTime,
+    handleRemoveTask,
+  });
 
   // Wait 2s for stable time value for LocalStorage update
   useEffect(() => {
