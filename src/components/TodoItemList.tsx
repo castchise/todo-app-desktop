@@ -75,7 +75,7 @@ export default function TodoItemList({
             "mb-4 border-2",
             selectedItem?.id === todoListItem?.id
               ? "border-gray-500"
-              : "border-gray-100"
+              : "border-gray-100 dark:border-gray-800"
           )}
           isActive={selectedItem?.id === todoListItem?.id}
           setSelectedItem={setSelectedItem}
