@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useRef } from "react";
 import { useGlobalContext } from "@/contexts";
 
+const SCROLL_DEBOUNCE_TIMEOUT_MS = 100;
+
 interface TodoItemListProps {
   todoList: TodoListItem[];
   className?: string;
@@ -19,6 +21,8 @@ export default function TodoItemList({
   setSelectedItem,
 }: TodoItemListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useRef(false);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const { setIsRemovingAllTodoItems } = useGlobalContext();
 
   const handleKeyUp = (e: KeyboardEvent) => {
@@ -39,8 +43,12 @@ export default function TodoItemList({
     if (!containerRef.current || !selectedItem) return;
 
     const container = containerRef.current;
+
     const observer = new IntersectionObserver(
       (entries) => {
+        // Skip observer if manual scroll
+        if (isScrolling.current) return;
+
         entries.forEach((entry) => {
           if (!entry.isIntersecting) {
             const targetElement = entry.target as HTMLElement;
@@ -53,18 +61,47 @@ export default function TodoItemList({
       },
       {
         root: container,
-        threshold: 1.0,
+        threshold: 1,
       }
     );
 
     const activeEl = container.querySelector(`[data-id="${selectedItem.id}"]`);
-
     if (activeEl) observer.observe(activeEl);
 
     return () => {
       if (activeEl) observer.unobserve(activeEl);
     };
   }, [selectedItem]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      isScrolling.current = true;
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+      scrollTimeout.current = setTimeout(() => {
+        isScrolling.current = false;
+      }, SCROLL_DEBOUNCE_TIMEOUT_MS);
+    };
+
+    const handleWheel = () => {
+      isScrolling.current = true;
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+      scrollTimeout.current = setTimeout(() => {
+        isScrolling.current = false;
+      }, SCROLL_DEBOUNCE_TIMEOUT_MS);
+    };
+
+    const container = containerRef.current;
+    container?.addEventListener("scroll", handleScroll);
+    container?.addEventListener("wheel", handleWheel);
+
+    return () => {
+      container?.removeEventListener("scroll", handleScroll);
+      container?.removeEventListener("wheel", handleWheel);
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
 
   return (
     <ScrollArea ref={containerRef} className={cn("h-screen", className)}>
