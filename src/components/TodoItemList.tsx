@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useRef } from "react";
 import { useGlobalContext } from "@/contexts";
-
-const SCROLL_DEBOUNCE_TIMEOUT_MS = 100;
+import { useScrollTaskIntoView } from "@/hooks";
 
 interface TodoItemListProps {
   todoList: TodoListItem[];
@@ -20,10 +19,9 @@ export default function TodoItemList({
   selectedItem,
   setSelectedItem,
 }: TodoItemListProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isScrolling = useRef(false);
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const { setIsRemovingAllTodoItems } = useGlobalContext();
+  const containerRef = useRef<HTMLDivElement>(null);
+  useScrollTaskIntoView({ containerRef, selectedItem });
 
   const handleKeyUp = (e: KeyboardEvent) => {
     if (!e.ctrlKey || e.code !== "KeyD") return;
@@ -36,70 +34,6 @@ export default function TodoItemList({
 
     return () => {
       document.addEventListener("keyup", handleKeyUp);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!containerRef.current || !selectedItem) return;
-
-    const container = containerRef.current;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Skip observer if manual scroll
-        if (isScrolling.current) return;
-
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            const targetElement = entry.target as HTMLElement;
-            targetElement.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-            });
-          }
-        });
-      },
-      {
-        root: container,
-        threshold: 1,
-      }
-    );
-
-    const activeEl = container.querySelector(`[data-id="${selectedItem.id}"]`);
-    if (activeEl) observer.observe(activeEl);
-
-    return () => {
-      if (activeEl) observer.unobserve(activeEl);
-    };
-  }, [selectedItem]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      isScrolling.current = true;
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-
-      scrollTimeout.current = setTimeout(() => {
-        isScrolling.current = false;
-      }, SCROLL_DEBOUNCE_TIMEOUT_MS);
-    };
-
-    const handleWheel = () => {
-      isScrolling.current = true;
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-
-      scrollTimeout.current = setTimeout(() => {
-        isScrolling.current = false;
-      }, SCROLL_DEBOUNCE_TIMEOUT_MS);
-    };
-
-    const container = containerRef.current;
-    container?.addEventListener("scroll", handleScroll);
-    container?.addEventListener("wheel", handleWheel);
-
-    return () => {
-      container?.removeEventListener("scroll", handleScroll);
-      container?.removeEventListener("wheel", handleWheel);
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
   }, []);
 
