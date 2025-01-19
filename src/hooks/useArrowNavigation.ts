@@ -50,9 +50,7 @@ export default function useArrowNavigation({
   );
 
   useEffect(() => {
-    if (!selectedItem) return;
-
-    selectedItemId.current = selectedItem.id;
+    selectedItemId.current = selectedItem?.id || null;
   }, [selectedItem]);
 
   useEffect(() => {
