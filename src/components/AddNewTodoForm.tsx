@@ -16,6 +16,7 @@ import { getTodoList, setLocalStorageValue } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import { v4 as uuid } from "uuid";
 import { useEffect, useRef } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 const formSchema = z.object({
   taskName: z.string(),
@@ -55,30 +56,29 @@ export default function AddNewTodoForm({
     setSelectedItem(updatedTodoList[0]);
   };
 
+  const handleKeyUp = (e: ReactKeyboardEvent<HTMLFormElement>) => {
+    e.stopPropagation();
+    if (e.code === "Escape") {
+      inputRef.current.blur();
+      setSelectedItem(context.todoList[0]);
+    }
+
+    if (e.code === "ArrowUp" || e.code === "ArrowDown") {
+      inputRef.current.blur();
+    }
+  };
+
   const handleInputFocus = (e: KeyboardEvent) => {
     if (e.ctrlKey && e.code === "KeyN") {
       form.setFocus("taskName");
     }
   };
 
-  const handleInputBlur = (e: KeyboardEvent) => {
-    if (e.code === "Escape") {
-      inputRef.current.blur();
-      setSelectedItem(context.todoList[0]);
-    }
-
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-      inputRef.current.blur();
-    }
-  };
-
   useEffect(() => {
     document.addEventListener("keyup", handleInputFocus);
-    inputRef.current?.addEventListener("keyup", handleInputBlur);
 
     return () => {
       document.removeEventListener("keyup", handleInputFocus);
-      inputRef.current?.removeEventListener("keyup", handleInputBlur);
     };
   }, []);
 
@@ -88,6 +88,7 @@ export default function AddNewTodoForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex"
         onChange={() => setSelectedItem(null)}
+        onKeyUp={(e) => handleKeyUp(e)}
       >
         <FormField
           control={form.control}
