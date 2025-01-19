@@ -16,7 +16,7 @@ import { LayoutGrid, Settings, Keyboard } from "lucide-react";
 
 export default function AppDialog() {
   return (
-    <Dialog open>
+    <Dialog>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
