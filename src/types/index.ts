@@ -6,3 +6,5 @@ export interface TodoListItem {
 }
 
 export type LocalStorageKey = "todoList" | "darkmode";
+
+export type TodoItemAction = "remove-item" | "edit-item";

@@ -1,5 +1,5 @@
 import type { TodoListItem } from "@/types";
-import TodoItem from "@/components/TodoItem";
+import TodoItem from "@/components/todo-item/TodoItem";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useRef } from "react";

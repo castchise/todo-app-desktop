@@ -1,5 +1,5 @@
 import AddNewTodoForm from "@/components/AddNewTodoForm";
-import TodoItemList from "@/components/TodoItemList";
+import TodoItemList from "@/components/todo-item/TodoItemList";
 import { Separator } from "@/components/ui/separator";
 import AppDialog from "@/components/app-settings/AppDialog";
 import { useGlobalContext } from "@/contexts";
@@ -53,6 +53,7 @@ export default function RootLayout() {
         )}
 
         <Separator className="my-8" />
+
         <div className="w-full flex items-center justify-between">
           <AppDialog />
           <p className="font-semibold text-sm">
