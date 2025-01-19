@@ -40,8 +40,10 @@ export default function TodoItemList({
         <TodoItem
           key={todoListItem.id}
           className={cn(
-            "mb-4",
-            selectedItem?.id === todoListItem?.id && "border border-red-500"
+            "mb-4 border-2",
+            selectedItem?.id === todoListItem?.id
+              ? "border-gray-500"
+              : "border-gray-100"
           )}
           isActive={selectedItem?.id === todoListItem?.id}
           setSelectedItem={setSelectedItem}
