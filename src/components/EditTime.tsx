@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { KeyboardEvent } from "react";
 import { Input } from "./ui/input";
 import {
   createDynamicMask,
@@ -35,28 +36,23 @@ export default function EditTime({
     setChangeTime(updatedTime);
   };
 
-  useEffect(() => {
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (!isActiveItem) return;
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    if (!isActiveItem) return;
 
-      switch (e.key) {
-        case "Enter": {
-          handleTimeChange(changeTime);
-          break;
-        }
-        case "Escape": {
-          setIsEditing(false);
-          break;
-        }
-        default:
-        //no-op
+    switch (e.code) {
+      case "Enter": {
+        handleTimeChange(changeTime);
+        break;
       }
-    };
-
-    document.addEventListener("keyup", handleKeyUp);
-
-    return () => document.removeEventListener("keyup", handleKeyUp);
-  }, [handleTimeChange]);
+      case "Escape": {
+        setIsEditing(false);
+        break;
+      }
+      default:
+      //no-op
+    }
+  };
 
   return (
     <MaskedInput
@@ -64,6 +60,7 @@ export default function EditTime({
       value={changeTime}
       onClick={() => setActiveItem()}
       onChange={(e) => handleInputChange(e.target.value)}
+      onKeyUp={(e) => handleKeyUp(e)}
       placeholder="00:00:00"
       render={(ref, props) => (
         <Input

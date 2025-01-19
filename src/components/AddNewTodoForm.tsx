@@ -16,6 +16,7 @@ import { getTodoList, setLocalStorageValue } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts";
 import { v4 as uuid } from "uuid";
 import { useEffect, useRef } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 const formSchema = z.object({
   taskName: z.string(),
@@ -56,31 +57,51 @@ export default function AddNewTodoForm({
     setSelectedItem(updatedTodoList[0]);
   };
 
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (!e.ctrlKey || e.code !== "KeyN") return;
+  const handleKeyUp = (e: ReactKeyboardEvent<HTMLFormElement>) => {
+    e.stopPropagation();
+    if (e.code === "Escape") {
+      inputRef.current.blur();
+      setSelectedItem(context.todoList[0]);
+    }
 
-    setSelectedItem(null);
-    form.setFocus("taskName");
+    if (e.code === "ArrowUp" || e.code === "ArrowDown") {
+      inputRef.current.blur();
+    }
+  };
+
+  const handleInputFocus = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.code === "KeyN") {
+      form.setFocus("taskName");
+    }
   };
 
   useEffect(() => {
-    document.addEventListener("keyup", handleKeyUp);
+    document.addEventListener("keyup", handleInputFocus);
 
     return () => {
-      document.removeEventListener("keyup", handleKeyUp);
+      document.removeEventListener("keyup", handleInputFocus);
     };
   }, []);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex"
+        onChange={() => setSelectedItem(null)}
+        onKeyUp={(e) => handleKeyUp(e)}
+      >
         <FormField
           control={form.control}
           name="taskName"
           render={({ field }) => (
             <FormItem className="flex-grow mr-4">
               <FormControl ref={inputRef}>
-                <Input placeholder="Write a new task..." {...field} />
+                <Input
+                  placeholder="Write a new task..."
+                  onFocus={() => setSelectedItem(null)}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

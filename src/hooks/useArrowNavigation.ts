@@ -16,15 +16,16 @@ export default function useArrowNavigation({
     (e: KeyboardEvent) => {
       if (todoList.length === 0) return;
 
-      const currentSelectedItemId = selectedItemId.current;
-
-      if (!currentSelectedItemId) {
-        setSelectedItem(todoList[0]);
-        return;
-      }
-
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
+
+        const currentSelectedItemId = selectedItemId.current;
+
+        if (!currentSelectedItemId) {
+          setSelectedItem(todoList[0]);
+          return;
+        }
+
         const currentIndex = todoList.findIndex(
           (todoItem) => todoItem.id === currentSelectedItemId
         );
@@ -50,9 +51,7 @@ export default function useArrowNavigation({
   );
 
   useEffect(() => {
-    if (!selectedItem) return;
-
-    selectedItemId.current = selectedItem.id;
+    selectedItemId.current = selectedItem?.id || null;
   }, [selectedItem]);
 
   useEffect(() => {
