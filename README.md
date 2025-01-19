@@ -1,5 +1,7 @@
 # Desktop ToDo Application
 
+https://github.com/user-attachments/assets/6d334d24-0cb8-4885-86d3-0d21d91a0dd6
+
 ## 🤡 About
 
 Simple todo application with an ability to pause and edit timer, removal of the items themselves and a couple of QoL features. (hotkeys, dark theme)
