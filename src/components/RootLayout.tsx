@@ -3,8 +3,8 @@ import TodoItemList from "@/components/TodoItemList";
 import { Separator } from "@/components/ui/separator";
 import AppDialog from "@/components/app-settings/AppDialog";
 import { useGlobalContext } from "@/contexts";
-import { cn, formatDurationToHours } from "@/lib/utils";
-import { useMemo } from "react";
+import { formatDurationToHours } from "@/lib/utils";
+import { useEffect, useMemo } from "react";
 import { useArrowNavigation } from "@/hooks";
 import ConfirmationDialog from "./ConfirmationDialog";
 
@@ -22,8 +22,16 @@ export default function RootLayout() {
     return todoList.reduce((sum, item) => sum + item.timeSpent, 0);
   }, [todoList]);
 
+  useEffect(() => {
+    if (darkmode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, [darkmode]);
+
   return (
-    <div className={cn(darkmode && "dark")}>
+    <div>
       <div
         className={
           "w-full h-screen p-4 flex flex-col sm:p-8 dark:bg-gray-900 dark:text-white"
