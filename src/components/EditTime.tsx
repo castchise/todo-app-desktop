@@ -40,7 +40,7 @@ export default function EditTime({
     e.stopPropagation();
     if (!isActiveItem) return;
 
-    switch (e.key) {
+    switch (e.code) {
       case "Enter": {
         handleTimeChange(changeTime);
         break;
