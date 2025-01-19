@@ -16,7 +16,7 @@ export default function useArrowNavigation({
     (e: KeyboardEvent) => {
       if (todoList.length === 0) return;
 
-      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      if (e.code === "ArrowUp" || e.code === "ArrowDown") {
         e.preventDefault();
 
         const currentSelectedItemId = selectedItemId.current;
@@ -32,7 +32,7 @@ export default function useArrowNavigation({
 
         let nextItem: TodoListItem;
 
-        if (e.key === "ArrowUp") {
+        if (e.code === "ArrowUp") {
           nextItem =
             currentIndex === 0
               ? todoList[todoList.length - 1]
