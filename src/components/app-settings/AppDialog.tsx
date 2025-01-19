@@ -30,7 +30,7 @@ export default function AppDialog() {
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle className="">Application</DialogTitle>
-          <div className="!mt-6 space-y-6 text-slate-600">
+          <div className="!mt-6 space-y-6 text-slate-600 dark:text-white">
             <Separator />
             <div>
               <h3 className="flex items-center font-semibold mb-4 space-x-2">
