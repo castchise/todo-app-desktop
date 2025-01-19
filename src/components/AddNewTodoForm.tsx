@@ -52,35 +52,50 @@ export default function AddNewTodoForm({
     setLocalStorageValue("todoList", updatedTodoList);
 
     form.reset();
-    inputRef.current.blur();
     setSelectedItem(updatedTodoList[0]);
   };
 
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (!e.ctrlKey || e.code !== "KeyN") return;
+  const handleInputFocus = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.code === "KeyN") {
+      form.setFocus("taskName");
+    }
+  };
 
-    setSelectedItem(null);
-    form.setFocus("taskName");
+  const handleInputBlur = (e: KeyboardEvent) => {
+    if (e.code === "Escape") {
+      inputRef.current.blur();
+      setSelectedItem(context.todoList[0]);
+    }
   };
 
   useEffect(() => {
-    document.addEventListener("keyup", handleKeyUp);
+    document.addEventListener("keyup", handleInputFocus);
+    inputRef.current?.addEventListener("keyup", handleInputBlur);
 
     return () => {
-      document.removeEventListener("keyup", handleKeyUp);
+      document.removeEventListener("keyup", handleInputFocus);
+      inputRef.current?.removeEventListener("keyup", handleInputBlur);
     };
   }, []);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex"
+        onChange={() => setSelectedItem(null)}
+      >
         <FormField
           control={form.control}
           name="taskName"
           render={({ field }) => (
             <FormItem className="flex-grow mr-4">
               <FormControl ref={inputRef}>
-                <Input placeholder="Write a new task..." {...field} />
+                <Input
+                  placeholder="Write a new task..."
+                  onFocus={() => setSelectedItem(null)}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
