@@ -143,11 +143,9 @@ export default function TaskItem(taskItem: TaskItemProps) {
           const currentIndex = todoList.findIndex(
             (todoListItem) => todoListItem.id === taskItem.id
           );
-          const nextItem =
-            currentIndex === todoList.length - 1
-              ? todoList[0]
-              : todoList[currentIndex + 1];
-          setSelectedItem(nextItem);
+          const nextSelection =
+            currentIndex === 0 ? todoList[1] : todoList[currentIndex - 1];
+          setSelectedItem(nextSelection);
           removeTodoItem(taskItem.id);
         }}
       />
