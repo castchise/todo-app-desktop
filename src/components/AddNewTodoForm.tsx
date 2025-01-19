@@ -53,6 +53,7 @@ export default function AddNewTodoForm({
     setLocalStorageValue("todoList", updatedTodoList);
 
     form.reset();
+    inputRef.current.blur();
     setSelectedItem(updatedTodoList[0]);
   };
 
