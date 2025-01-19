@@ -29,7 +29,7 @@ export function GlobalContextProvider({
   value,
   children,
 }: {
-  value: GlobalContextProps;
+  value: Partial<GlobalContextProps>;
   children: ReactElement;
 }) {
   const [todoList, setTodoList] = useState(value?.todoList || []);
