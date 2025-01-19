@@ -14,9 +14,9 @@ import { RemoveAllTodoItemsDialog } from "./RemoveAllTodoItemsDialog";
 import KeybindRow from "./KeybindRow";
 import { LayoutGrid, Settings, Keyboard } from "lucide-react";
 
-export default function AppSettingsDialog() {
+export default function AppDialog() {
   return (
-    <Dialog>
+    <Dialog open>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
@@ -24,13 +24,14 @@ export default function AppSettingsDialog() {
           onKeyUp={(e) => e.preventDefault()}
         >
           <LayoutGrid />
-          Settings
+          Application
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="mb-4">Application Settings</DialogTitle>
-          <div className="space-y-6 text-slate-600">
+          <DialogTitle className="">Application</DialogTitle>
+          <div className="!mt-6 space-y-6 text-slate-600">
+            <Separator />
             <div>
               <h3 className="flex items-center font-semibold mb-4 space-x-2">
                 <Settings style={{ color: "inherit" }} /> <span>Settings</span>
@@ -42,7 +43,6 @@ export default function AppSettingsDialog() {
             </div>
 
             <Separator />
-
             <div>
               <h3 className="flex items-center font-semibold mb-4 space-x-2">
                 <Keyboard style={{ color: "inherit" }} /> <span>Keybinds</span>
