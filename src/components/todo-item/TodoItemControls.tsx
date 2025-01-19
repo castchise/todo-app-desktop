@@ -49,7 +49,7 @@ export default function TodoItemControls({
         ) : (
           <Button
             variant="ghost"
-            className="font-normal text-md"
+            className="text-md font-normal"
             onClick={handleEditTaskTime}
           >
             {formatDurationToHours(time)}

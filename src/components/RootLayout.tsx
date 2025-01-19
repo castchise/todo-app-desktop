@@ -34,7 +34,7 @@ export default function RootLayout() {
     <div>
       <div
         className={
-          "w-full h-screen p-4 flex flex-col sm:p-8 dark:bg-gray-900 dark:text-white"
+          "flex h-screen w-full flex-col p-4 dark:bg-gray-900 dark:text-white sm:p-8"
         }
       >
         <AddNewTodoForm setSelectedItem={setSelectedItem} />
@@ -47,16 +47,16 @@ export default function RootLayout() {
             className="mt-8"
           />
         ) : (
-          <p className="flex justify-center items-center flex-grow text-lg sm:text-2xl font-light tracking-wide text-slate-400 pointer-events-none">
+          <p className="pointer-events-none flex flex-grow items-center justify-center text-lg font-light tracking-wide text-slate-400 sm:text-2xl">
             No tasks to track yet...
           </p>
         )}
 
         <Separator className="my-8" />
 
-        <div className="w-full flex items-center justify-between">
+        <div className="flex w-full items-center justify-between">
           <AppDialog />
-          <p className="font-semibold text-sm">
+          <p className="text-sm font-semibold">
             Total: {formatDurationToHours(totalDuration)}
           </p>
         </div>

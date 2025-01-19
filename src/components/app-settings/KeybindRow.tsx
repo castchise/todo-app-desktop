@@ -14,7 +14,7 @@ export default function KeybindRow({
           <KeyboardButton key={id}>{hotkey}</KeyboardButton>
         ))}
       </div>
-      <p className="ml-4 text-md font-light">{description}</p>
+      <p className="text-md ml-4 font-light">{description}</p>
     </div>
   );
 }

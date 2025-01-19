@@ -20,7 +20,7 @@ export function RemoveAllTodoItemsDialog() {
       <p
         className={cn(
           "ml-2 text-sm",
-          todoList.length > 0 ? "text-red-500 font-semibold" : "text-slate-400"
+          todoList.length > 0 ? "font-semibold text-red-500" : "text-slate-400"
         )}
       >
         Remove all Tasks

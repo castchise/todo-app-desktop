@@ -83,14 +83,14 @@ export default function TodoItem(todoItem: TodoItemProps) {
     <div
       data-id={todoItem.id}
       className={cn(
-        "p-4 border rounded flex items-start flex-wrap sm:flex-nowrap",
+        "flex flex-wrap items-start rounded border p-4 sm:flex-nowrap",
         className
       )}
     >
       <Button
         size="icon"
         variant="outline"
-        className="dark:bg-gray-900 flex-shrink-0"
+        className="flex-shrink-0 dark:bg-gray-900"
         onClick={() => (isPaused ? handleContinueTask() : handlePauseTask())}
       >
         {isPaused ? <Play /> : <Pause />}
