@@ -1,14 +1,14 @@
 # Desktop ToDo Application
 
-## About
+## 🤡 About
 
 Simple todo application with an ability to pause and edit timer, removal of the items themselves and a couple of QoL features. (hotkeys, dark theme)
 
-### Installation
+### 🪄 Installation
 
 Download latest release installer on https://github.com/castchise/todo-app-desktop/releases
 
-### Support
+### ✅ Support
 
 Currently only Windows OS is supported.
 _(extension of `makers` is available through `forge.config`)_
@@ -21,8 +21,8 @@ _(extension of `makers` is available through `forge.config`)_
         ... // extend with another forge maker
       ],
 
-### Tech-Stack
+### ⚙️ Tech-Stack
 
-- electron / electron-forge
-- shadcn, tailwind, lucide-react
-- dayjs
+- [electron](https://www.electronjs.org/) / [electron-forge](https://www.electronforge.io/)
+- [shadcn](https://ui.shadcn.com/), [tailwindcss](https://tailwindcss.com/), [lucide-react](https://lucide.dev/)
+- [dayjs](https://day.js.org/)
