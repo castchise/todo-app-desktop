@@ -85,6 +85,7 @@ export default function TaskItem(taskItem: TaskItemProps) {
 
   return (
     <div
+      data-id={taskItem.id}
       className={cn(
         "p-4 border rounded flex items-start flex-wrap sm:flex-nowrap",
         className
