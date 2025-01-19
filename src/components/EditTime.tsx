@@ -66,7 +66,7 @@ export default function EditTime({
         <Input
           autoFocus
           ref={ref}
-          className="text-center w-[100px] !text-[16px] !py-1"
+          className="w-[100px] !py-1 text-center !text-[16px]"
           {...props}
         />
       )}

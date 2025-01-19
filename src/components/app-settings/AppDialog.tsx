@@ -33,7 +33,7 @@ export default function AppDialog() {
           <div className="!mt-6 space-y-6 text-slate-600 dark:text-white">
             <Separator />
             <div>
-              <h3 className="flex items-center font-semibold mb-4 space-x-2">
+              <h3 className="mb-4 flex items-center space-x-2 font-semibold">
                 <Settings style={{ color: "inherit" }} /> <span>Settings</span>
               </h3>
               <div className="mt-6 space-y-4">
@@ -44,7 +44,7 @@ export default function AppDialog() {
 
             <Separator />
             <div>
-              <h3 className="flex items-center font-semibold mb-4 space-x-2">
+              <h3 className="mb-4 flex items-center space-x-2 font-semibold">
                 <Keyboard style={{ color: "inherit" }} /> <span>Keybinds</span>
               </h3>
               <div className="mt-6 space-y-6">

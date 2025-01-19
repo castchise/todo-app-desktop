@@ -95,7 +95,7 @@ export default function AddNewTodoForm({
           control={form.control}
           name="taskName"
           render={({ field }) => (
-            <FormItem className="flex-grow mr-4">
+            <FormItem className="mr-4 flex-grow">
               <FormControl ref={inputRef}>
                 <Input
                   placeholder="Write a new task..."
