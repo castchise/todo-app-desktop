@@ -14,7 +14,12 @@ jobs:
           node-version: 16.14.0
       - name: install dependencies
         run: npm install
+      - name: create env file
+        run: |
+          touch .env
+          echo GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} >> .env
+          cat .env
       - name: publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
         run: npm run publish
