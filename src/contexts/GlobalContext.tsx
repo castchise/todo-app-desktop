@@ -10,6 +10,8 @@ interface GlobalContextProps {
   updateTodoItem: (id: string, updatedFileds: Partial<TodoListItem>) => void;
   removeTodoItem: (id: string) => void;
   removeAllTodoItems: () => void;
+  isRemovingAllTodoItems: boolean;
+  setIsRemovingAllTodoItems: (isRemoving: boolean) => void;
 }
 
 const defaultValues: GlobalContextProps = {
@@ -17,6 +19,8 @@ const defaultValues: GlobalContextProps = {
   updateTodoItem: () => null,
   removeTodoItem: () => null,
   removeAllTodoItems: () => null,
+  isRemovingAllTodoItems: false,
+  setIsRemovingAllTodoItems: () => null,
 };
 
 const GlobalContext = createContext(defaultValues);
@@ -30,6 +34,7 @@ export function GlobalContextProvider({
 }) {
   const [todoList, setTodoList] = useState(value?.todoList || []);
   const [darkmode, setDarkmode] = useState(value?.darkmode || false);
+  const [isRemovingAllTodoItems, setIsRemovingAllTodoItems] = useState(false);
 
   const updateTodoItem = (id: string, updatedFields: Partial<TodoListItem>) => {
     setTodoList((prev) => {
@@ -64,6 +69,8 @@ export function GlobalContextProvider({
     updateTodoItem,
     removeTodoItem,
     removeAllTodoItems,
+    isRemovingAllTodoItems,
+    setIsRemovingAllTodoItems,
   };
 
   return (

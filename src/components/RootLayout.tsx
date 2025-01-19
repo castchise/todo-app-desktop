@@ -1,14 +1,21 @@
 import AddNewTodoForm from "@/components/AddNewTodoForm";
 import TodoItemList from "@/components/TodoItemList";
 import { Separator } from "@/components/ui/separator";
-import AppSettingsDialog from "@/components/app-settings/AppSettingsDialog";
+import AppDialog from "@/components/app-settings/AppDialog";
 import { useGlobalContext } from "@/contexts";
 import { cn, formatDurationToHours } from "@/lib/utils";
 import { useMemo } from "react";
 import { useArrowNavigation } from "@/hooks";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 export default function RootLayout() {
-  const { todoList, darkmode } = useGlobalContext();
+  const {
+    todoList,
+    darkmode,
+    removeAllTodoItems,
+    isRemovingAllTodoItems,
+    setIsRemovingAllTodoItems,
+  } = useGlobalContext();
   const [selectedItem, setSelectedItem] = useArrowNavigation({ todoList });
 
   const totalDuration = useMemo(() => {
@@ -39,12 +46,19 @@ export default function RootLayout() {
 
         <Separator className="my-8" />
         <div className="w-full flex items-center justify-between">
-          <AppSettingsDialog />
+          <AppDialog />
           <p className="font-semibold text-sm">
             Total: {formatDurationToHours(totalDuration)}
           </p>
         </div>
       </div>
+
+      <ConfirmationDialog
+        open={isRemovingAllTodoItems}
+        onOpenChange={setIsRemovingAllTodoItems}
+        onSubmit={() => removeAllTodoItems()}
+        title="Remove all Tasks?"
+      />
     </div>
   );
 }
