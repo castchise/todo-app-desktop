@@ -2,6 +2,8 @@ import type { TodoListItem } from "@/types";
 import TodoItem from "@/components/TodoItem";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect } from "react";
+import { useGlobalContext } from "@/contexts";
 
 interface TodoItemListProps {
   todoList: TodoListItem[];
@@ -16,6 +18,22 @@ export default function TodoItemList({
   selectedItem,
   setSelectedItem,
 }: TodoItemListProps) {
+  const { setIsRemovingAllTodoItems } = useGlobalContext();
+
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (!e.ctrlKey || e.code !== "KeyD") return;
+
+    setIsRemovingAllTodoItems(true);
+  };
+
+  useEffect(() => {
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.addEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
   return (
     <ScrollArea className={cn("h-screen", className)}>
       {todoList.map((todoListItem) => (
