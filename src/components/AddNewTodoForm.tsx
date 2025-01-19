@@ -66,6 +66,10 @@ export default function AddNewTodoForm({
       inputRef.current.blur();
       setSelectedItem(context.todoList[0]);
     }
+
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      inputRef.current.blur();
+    }
   };
 
   useEffect(() => {
